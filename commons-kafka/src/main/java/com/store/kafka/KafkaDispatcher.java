@@ -31,6 +31,7 @@ public class KafkaDispatcher<T> implements Closeable {
         .setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
     properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
         GSONSerializer.class.getName());
+    properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
     return properties;
   }
 
