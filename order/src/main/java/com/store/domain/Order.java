@@ -4,13 +4,19 @@ import java.math.BigDecimal;
 
 public class Order {
 
-  public Order(int orderNumber, BigDecimal price) {
+  private String userEmail;
+  private int orderNumber;
+  private BigDecimal price;
+
+  public Order(String userEmail, int orderNumber, BigDecimal price) {
+    this.userEmail = userEmail;
     this.orderNumber = orderNumber;
     this.price = price;
   }
 
-  private int orderNumber;
-  private BigDecimal price;
+  public String getUserEmail() {
+    return userEmail;
+  }
 
   public int getOrderNumber() {
     return orderNumber;

@@ -20,10 +20,10 @@ public class NewOrderParser implements ConsumerFunction<Order> {
     Order order = record.value();
     if(order.isFreeShipping()) {
       System.out.println("received new order with free shipping");
-      dispatcher.send(FREE_SHIPPING_TOPIC, String.valueOf(order.getOrderNumber()), order);
+      dispatcher.send(FREE_SHIPPING_TOPIC, order.getUserEmail(), order);
     } else {
       System.out.println("received new order with normal shipping");
-      dispatcher.send(NORMAL_SHIPPING_TOPIC, String.valueOf(order.getOrderNumber()), order);
+      dispatcher.send(NORMAL_SHIPPING_TOPIC, order.getUserEmail(), order);
     }
     System.out.println(
         "topic: " + record.topic() + " | value: " + order + " | offset: " + record
