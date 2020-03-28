@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -42,7 +43,15 @@ public class KafkaReceiver<T> implements Closeable {
     while (true) {
       ConsumerRecords<String, T> records = consumer.poll(Duration.ofMillis(TIMEOUT_IN_MILLIS));
       if (!records.isEmpty()) {
-        records.forEach(consumerFunction::parse);
+        records.forEach(record -> {
+          try {
+            consumerFunction.parse(record);
+          } catch (ExecutionException e) {
+            e.printStackTrace();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        });
       }
     }
   }

@@ -17,18 +17,6 @@ public class MainProducer {
     sendEmails();
   }
 
-  private static void sendEmails() throws ExecutionException, InterruptedException {
-    try (var dispatcher = new KafkaDispatcher<Email>()) {
-      for (int ignored = 0; ignored < 100; ignored++) {
-        int orderNumber = new Random().nextInt(999);
-        Email email = new Email("new order",
-            "Your order " + orderNumber + " is being processed");
-
-        dispatcher.send(SEND_EMAIL_TOPIC, String.valueOf(orderNumber), email);
-      }
-    }
-  }
-
   private static void sendNewOrders() throws InterruptedException, ExecutionException {
     try (var dispatcher = new KafkaDispatcher<Order>()) {
       for (int ignored = 0; ignored < 100; ignored++) {
@@ -37,6 +25,18 @@ public class MainProducer {
             BigDecimal.valueOf(new Random().nextLong()));
 
         dispatcher.send(STORE_NEW_ORDER_TOPIC, String.valueOf(orderNumber), order);
+      }
+    }
+  }
+
+  private static void sendEmails() throws ExecutionException, InterruptedException {
+    try (var dispatcher = new KafkaDispatcher<Email>()) {
+      for (int ignored = 0; ignored < 100; ignored++) {
+        int orderNumber = new Random().nextInt(999);
+        Email email = new Email("new order",
+            "Your order " + orderNumber + " is being processed");
+
+        dispatcher.send(SEND_EMAIL_TOPIC, String.valueOf(orderNumber), email);
       }
     }
   }

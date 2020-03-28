@@ -11,4 +11,12 @@ public class Order {
 
   private int orderNumber;
   private BigDecimal price;
+
+  public int getOrderNumber() {
+    return orderNumber;
+  }
+
+  public boolean isFreeShipping() {
+    return price.compareTo(BigDecimal.valueOf(100.0)) >= 0;
+  }
 }
