@@ -3,6 +3,8 @@ package com.store.kafka;
 import com.store.ConsumerFunction;
 import com.store.gson.GSONDeserializer;
 import java.io.Closeable;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
@@ -49,6 +51,10 @@ public class KafkaReceiver<T> implements Closeable {
           } catch (ExecutionException e) {
             e.printStackTrace();
           } catch (InterruptedException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          } catch (SQLException e) {
             e.printStackTrace();
           }
         });

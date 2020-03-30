@@ -15,6 +15,7 @@
     <module>commons-kafka</module>
     <module>producer</module>
     <module>user</module>
+    <module>report</module>
   </modules>
 
   <dependencies>
