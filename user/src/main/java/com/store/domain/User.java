@@ -8,4 +8,8 @@ import lombok.EqualsAndHashCode;
 public class User {
   private String id;
   private String email;
+
+  public String getId() {
+    return id;
+  }
 }

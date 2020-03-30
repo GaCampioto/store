@@ -3,14 +3,18 @@ package com.store.parser;
 import com.store.ConsumerFunction;
 import com.store.domain.Order;
 import com.store.repository.UserRepository;
+import java.sql.SQLException;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public class CreateUserParser implements ConsumerFunction<Order> {
 
   private final UserRepository repository = new UserRepository();
 
+  public CreateUserParser() throws SQLException {
+  }
+
   @Override
-  public void parse(ConsumerRecord<String, Order> record) {
+  public void parse(ConsumerRecord<String, Order> record) throws SQLException {
     Order order = record.value();
     if(!repository.exists(order.getUserEmail())) {
       repository.createUser(order.getUserEmail());
