@@ -3,6 +3,7 @@ package com.store.parser;
 import com.store.ConsumerFunction;
 import com.store.domain.Order;
 import com.store.kafka.KafkaDispatcher;
+import com.store.model.Message;
 import java.util.concurrent.ExecutionException;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -13,11 +14,10 @@ public class NewOrderParser implements ConsumerFunction<Order> {
   private final KafkaDispatcher<Order> dispatcher = new KafkaDispatcher<>();
 
   @Override
-  public void parse(ConsumerRecord<String, Order> record)
+  public void parse(ConsumerRecord<String, Message<Order>> record)
       throws ExecutionException, InterruptedException {
-    System.out
-        .println("----------------------------------------------------------------------");
-    Order order = record.value();
+    Message<Order> message = record.value();
+    Order order = message.getPayload();
     if(order.isFreeShipping()) {
       System.out.println("received new order with free shipping");
       dispatcher.send(FREE_SHIPPING_TOPIC, order.getUserEmail(), order);
@@ -25,10 +25,5 @@ public class NewOrderParser implements ConsumerFunction<Order> {
       System.out.println("received new order with normal shipping");
       dispatcher.send(NORMAL_SHIPPING_TOPIC, order.getUserEmail(), order);
     }
-    System.out.println(
-        "topic: " + record.topic() + " | value: " + order + " | offset: " + record
-            .offset() + " | partition: " + record.partition());
-    System.out
-        .println("----------------------------------------------------------------------");
   }
 }

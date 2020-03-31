@@ -2,6 +2,7 @@ package com.store.kafka;
 
 import com.store.ConsumerFunction;
 import com.store.gson.GSONDeserializer;
+import com.store.model.Message;
 import java.io.Closeable;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,7 +13,6 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
@@ -20,18 +20,18 @@ public class KafkaReceiver<T> implements Closeable {
 
   public static final int TIMEOUT_IN_MILLIS = 3000;
 
-  private final KafkaConsumer<String, T> consumer;
+  private final KafkaConsumer<String, Message<T>> consumer;
   private final ConsumerFunction<T> consumerFunction;
 
   public KafkaReceiver(Class<T> type, String groupId, Collection<String> topics,
       Map<String, String> overrideProperties, ConsumerFunction<T> consumerFunction) {
-    this(type, groupId,overrideProperties, consumerFunction);
+    this(type, groupId, overrideProperties, consumerFunction);
     this.consumer.subscribe(topics);
   }
 
   public KafkaReceiver(Class<T> type, String groupId, Pattern pattern,
       Map<String, String> overrideProperties, ConsumerFunction<T> consumerFunction) {
-    this(type, groupId,overrideProperties, consumerFunction);
+    this(type, groupId, overrideProperties, consumerFunction);
     this.consumer.subscribe(pattern);
   }
 
@@ -43,11 +43,20 @@ public class KafkaReceiver<T> implements Closeable {
 
   public void run() {
     while (true) {
-      ConsumerRecords<String, T> records = consumer.poll(Duration.ofMillis(TIMEOUT_IN_MILLIS));
+      var records = consumer.poll(Duration.ofMillis(TIMEOUT_IN_MILLIS));
       if (!records.isEmpty()) {
         records.forEach(record -> {
           try {
+            System.out
+                .println("----------------------------------------------------------------------");
+            System.out
+                .println("Received message with id " + record.value().getId());
+            System.out.println(
+                "topic: " + record.topic() + " | offset: " + record.offset() + " | partition: "
+                    + record.partition());
             consumerFunction.parse(record);
+            System.out
+                .println("----------------------------------------------------------------------");
           } catch (ExecutionException e) {
             e.printStackTrace();
           } catch (InterruptedException e) {

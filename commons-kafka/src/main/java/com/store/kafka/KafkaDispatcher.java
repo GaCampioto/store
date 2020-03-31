@@ -1,6 +1,8 @@
 package com.store.kafka;
 
 import com.store.gson.GSONSerializer;
+import com.store.model.CorrelationId;
+import com.store.model.Message;
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -12,15 +14,15 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 public class KafkaDispatcher<T> implements Closeable {
 
-  private final KafkaProducer<String, T> producer;
+  private final KafkaProducer<String, Message<T>> producer;
 
   public KafkaDispatcher() {
     this.producer = new KafkaProducer<>(properties());
   }
 
-  public void send(String topic, String key, T value)
+  public void send(String topic, String key, T payload)
       throws InterruptedException, ExecutionException {
-    producer.send(new ProducerRecord<>(topic, key, value),
+    producer.send(new ProducerRecord<>(topic, key, new Message(new CorrelationId(), payload)),
         callback()).get();
   }
 
