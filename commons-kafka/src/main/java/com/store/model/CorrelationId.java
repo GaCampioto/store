@@ -5,9 +5,13 @@ import lombok.ToString;
 
 @ToString
 public class CorrelationId {
-  private final String correlationId;
+  private final String id;
 
-  public CorrelationId() {
-    this.correlationId = UUID.randomUUID().toString();
+  public CorrelationId(String title) {
+    this.id = title + "(" + UUID.randomUUID().toString() + ")";
+  }
+
+  public CorrelationId append(String title) {
+    return new CorrelationId(id + "-" + title);
   }
 }

@@ -49,8 +49,6 @@ public class KafkaReceiver<T> implements Closeable {
           try {
             System.out
                 .println("----------------------------------------------------------------------");
-            System.out
-                .println("Received message with id " + record.value().getId());
             System.out.println(
                 "topic: " + record.topic() + " | offset: " + record.offset() + " | partition: "
                     + record.partition());

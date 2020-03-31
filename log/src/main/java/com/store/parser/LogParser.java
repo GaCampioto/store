@@ -8,9 +8,8 @@ public class LogParser implements ConsumerFunction<String> {
 
   @Override
   public void parse(ConsumerRecord<String, Message<String>> record) {
-    System.out.println("received log");
     System.out.println(
-        "topic: " + record.topic() + " | value: " + record.value().getPayload() + " | offset: " + record
+        "topic: " + record.topic() + " | value: " + record.value() + " | offset: " + record
             .offset() + " | partition: " + record.partition());
   }
 }

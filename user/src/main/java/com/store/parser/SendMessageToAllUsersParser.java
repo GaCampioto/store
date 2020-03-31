@@ -11,6 +11,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public class SendMessageToAllUsersParser implements ConsumerFunction<String> {
 
+  private static final String SERVICE_NAME = "users";
   private final UserRepository repository = new UserRepository();
   private final KafkaDispatcher<User> dispatcher = new KafkaDispatcher<>();
 
@@ -24,7 +25,7 @@ public class SendMessageToAllUsersParser implements ConsumerFunction<String> {
     for (User user : repository.getAll()) {
       System.out.println("Sending message to " + user.getId());
       Message<String> message = record.value();
-      dispatcher.send(message.getPayload(), user.getId(), user);
+      dispatcher.send(message.getPayload(), user.getId(), user, message.getId().append(SERVICE_NAME));
     }
     System.out.println("The messages has been sent");
   }
