@@ -6,6 +6,7 @@ import com.store.model.Message;
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -22,8 +23,12 @@ public class KafkaDispatcher<T> implements Closeable {
 
   public void send(String topic, String key, T payload, CorrelationId id)
       throws InterruptedException, ExecutionException {
-    producer.send(new ProducerRecord<>(topic, key, new Message(id, payload)),
-        callback()).get();
+    sendAsync(topic, key, payload, id).get();
+  }
+
+  public Future sendAsync(String topic, String key, T payload, CorrelationId id) {
+    return producer.send(new ProducerRecord<>(topic, key, new Message(id, payload)),
+        callback());
   }
 
   private Properties properties() {
@@ -34,6 +39,7 @@ public class KafkaDispatcher<T> implements Closeable {
     properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
         GSONSerializer.class.getName());
     properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
+    properties.setProperty(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "1");
     return properties;
   }
 
