@@ -13,12 +13,11 @@ public class CreateUser {
 
   public static void main(String[] args)
       throws SQLException, ExecutionException, InterruptedException {
-    CreateUserParser createUserParser = new CreateUserParser();
     try (var kafkaReceiver = new KafkaReceiver<>(
         CreateUser.class.getSimpleName(),
         TOPICS,
         Map.of(),
-        createUserParser)) {
+        new CreateUserParser())) {
       kafkaReceiver.run();
     }
   }

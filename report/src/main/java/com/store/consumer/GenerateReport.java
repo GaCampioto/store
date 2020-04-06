@@ -11,12 +11,11 @@ public class GenerateReport {
   public static final List<String> TOPICS = Collections.singletonList("store.create-report-for-user");
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    GenerateReportParser generateReportParser = new GenerateReportParser();
     try (var kafkaReceiver = new KafkaReceiver<>(
         GenerateReport.class.getSimpleName(),
         TOPICS,
         Map.of(),
-        generateReportParser)) {
+        new GenerateReportParser())) {
       kafkaReceiver.run();
     }
   }

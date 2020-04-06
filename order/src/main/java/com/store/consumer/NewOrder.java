@@ -12,12 +12,11 @@ public class NewOrder {
   public static final List<String> TOPICS = Collections.singletonList("store.new-order");
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    NewOrderParser newOrderParser = new NewOrderParser();
     try (var kafkaReceiver = new KafkaReceiver<>(
         NewOrder.class.getSimpleName(),
         TOPICS,
         Map.of(),
-        newOrderParser)) {
+        new NewOrderParser())) {
       kafkaReceiver.run();
     }
   }

@@ -1,22 +1,22 @@
 package com.store.consumer;
 
 import com.store.kafka.KafkaReceiver;
-import com.store.parser.SendEmailParser;
+import com.store.parser.PrepareEmailForNewOrderParser;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class SendEmail {
+public class PrepareEmailForNewOrder {
 
-  public static final List<String> TOPICS = Collections.singletonList("store.send-email");
+  public static final List<String> TOPICS = Collections.singletonList("store.new-order");
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
     try (var kafkaReceiver = new KafkaReceiver<>(
-        SendEmail.class.getSimpleName(),
+        PrepareEmailForNewOrder.class.getSimpleName(),
         TOPICS,
         Map.of(),
-        new SendEmailParser())) {
+        new PrepareEmailForNewOrderParser())) {
       kafkaReceiver.run();
     }
   }

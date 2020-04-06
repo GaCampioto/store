@@ -13,12 +13,11 @@ public class SendMessageToAllUsers {
 
   public static void main(String[] args)
       throws SQLException, ExecutionException, InterruptedException {
-    SendMessageToAllUsersParser sendMessageToAllUsersParser = new SendMessageToAllUsersParser();
     try (var kafkaReceiver = new KafkaReceiver<>(
         SendMessageToAllUsers.class.getSimpleName(),
         TOPICS,
         Map.of(),
-        sendMessageToAllUsersParser)) {
+        new SendMessageToAllUsersParser())) {
       kafkaReceiver.run();
     }
   }

@@ -15,12 +15,11 @@ public class LogService {
       StringDeserializer.class.getName());
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    LogParser logParser = new LogParser();
     try (var kafkaReceiver = new KafkaReceiver<>(
         LogService.class.getSimpleName(),
         ALL_STORE,
         CUSTOM_PROPERTIES,
-        logParser)) {
+        new LogParser())) {
       kafkaReceiver.run();
     }
   }
