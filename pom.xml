@@ -16,6 +16,7 @@
     <module>producer</module>
     <module>user</module>
     <module>report</module>
+    <module>commons-database</module>
   </modules>
 
   <dependencies>

@@ -22,6 +22,10 @@ public class Order {
     return orderNumber;
   }
 
+  public BigDecimal getPrice() {
+    return price;
+  }
+
   public boolean isFreeShipping() {
     return price.compareTo(BigDecimal.valueOf(100.0)) >= 0;
   }
