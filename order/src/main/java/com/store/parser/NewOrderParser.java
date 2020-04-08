@@ -26,7 +26,7 @@ public class NewOrderParser implements ConsumerFunction<Order> {
       throws ExecutionException, InterruptedException, SQLException {
     Message<Order> message = record.value();
     Order order = message.getPayload();
-    if (alreadyProccessed(order)) {
+    if (alreadyProcessed(order)) {
       return;
     }
 
@@ -40,7 +40,7 @@ public class NewOrderParser implements ConsumerFunction<Order> {
     }
   }
 
-  private boolean alreadyProccessed(Order order) throws SQLException {
+  private boolean alreadyProcessed(Order order) throws SQLException {
     return orderRepository.exists(order);
   }
 }
