@@ -21,7 +21,7 @@ This project has some modules to `represent` microservices and the communication
 - Run the `MainProducer.java` to create first messages in `store.new-order`.
 
 ### Disclaimer
-- Ignore the strategy used to simulate a local database and deal with `Exceptions, the objective is try kafka and not protect yourself with sql injection and other defensive strategies.
+- Ignore the strategy used to simulate a local database and deal with `Exceptions`, the objective is try kafka and not protect yourself with sql injection and other defensive strategies.
 - This project were created following the online trainning 
   - https://www.alura.com.br/curso-online-kafka-introducao-a-streams-em-microservicos 
   - https://www.alura.com.br/curso-online-kafka-cluster-de-microservicos
